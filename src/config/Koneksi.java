@@ -17,7 +17,7 @@ public class Koneksi {
         if (conn == null) {
             try {
                 
-                String url = "jdbc:mysql://localhost:3306/db_koperasi_221011400010";
+                String url = "jdbc:mysql://localhost:3306/db_koperasi_simpan_pinjam_201011450190";
                 String user = "root"; 
                 String pass = "";     
                 

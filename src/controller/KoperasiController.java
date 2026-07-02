@@ -16,13 +16,11 @@ public class KoperasiController {
     private FormUtama view;
     private PinjamanDAO dao;
 
-    // Konstruktor mengikat objek FormUtama agar komponen GUI bisa dimanipulasi teksnya
     public KoperasiController(FormUtama view) {
         this.view = view;
         this.dao = new PinjamanDAO();
     }
 
-    // Sinkronisasi data array list dari DAO ke komponen JTable View
     public void loadData() {
         try {
             List<Pinjaman> list = dao.getAll();
@@ -32,7 +30,7 @@ public class KoperasiController {
         }
     }
 
-    // Melakukan filter data JTable berdasarkan input teks pencarian
+    // filter data JTable berdasarkan input teks pencarian
     public void searchData() {
         String keyword = view.getTxtCari().getText();
         try {
@@ -45,10 +43,24 @@ public class KoperasiController {
 
     private void displayToTable(List<Pinjaman> list) {
         DefaultTableModel model = (DefaultTableModel) view.getTabelPinjaman().getModel();
-        model.setRowCount(0); // Kosongkan tabel sebelum memuat data baru
-        for (Pinjaman p : list) {
-            model.addRow(new Object[]{p.getNo(), p.getNama(), p.getJumlah(), p.getAngsuran()});
-        }
+    model.setRowCount(0); // Kosongkan tabel sebelum memuat data baru
+    
+    // Membuat format angka lokal Indonesia tanpa desimal di belakang koma
+    // #,##0 artinya angka akan dikelompokkan ribuan dengan tanda titik/koma sesuai lokal OS
+    java.text.DecimalFormat formatter = new java.text.DecimalFormat("#,##0");
+    
+    for (Pinjaman p : list) {
+        String jumlahTerformat = formatter.format(p.getJumlah());
+        String angsuranTerformat = formatter.format(p.getAngsuran());
+        
+                
+        model.addRow(new Object[]{
+            p.getNo(), 
+            p.getNama(), 
+            jumlahTerformat, // Masukkan data yang sudah diformat ke tabel
+            angsuranTerformat
+        });
+    }
     }
 
     // Logika Simpan Data + Validasi Input
