@@ -13,8 +13,7 @@ import java.util.List;
 public class PinjamanDAO {
     private Connection connection;
 
-    // Saat Objek DAO dibuat, otomatis mengambil koneksi yang aktif
-    public PinjamanDAO() {
+        public PinjamanDAO() {
         this.connection = Koneksi.getConnection();
     }
 

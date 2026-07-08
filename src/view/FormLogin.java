@@ -94,7 +94,7 @@ public class FormLogin extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         String username = txtUsername.getText();
-        String password = new String(txtPassword.getPassword());
+    String password = new String(txtPassword.getPassword());
 
     // Validasi input kosong
     if (username.isEmpty() || password.isEmpty()) {
@@ -102,23 +102,29 @@ public class FormLogin extends javax.swing.JFrame {
         return;
     }
 
-    // Query langsung ke tbl_users
     String sql = "SELECT * FROM tbl_users WHERE username = ? AND password = ?";
-    try (java.sql.Connection conn = config.Koneksi.getConnection();
-         java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+    
+    // 1. Ambil instance koneksi di luar blok try-with-resources agar TIDAK tertutup otomatis
+    java.sql.Connection conn = config.Koneksi.getConnection();
+    
+    // 2. Hanya masukkan PreparedStatement dan ResultSet ke dalam try-with-resources
+    try (java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
         
         ps.setString(1, username);
         ps.setString(2, password);
-        java.sql.ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Login Berhasil!");
-            // Buka Form Utama
-            new FormUtama().setVisible(true);
-            // Tutup Form Login
-            this.dispose();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Username atau Password Salah!");
+        
+        try (java.sql.ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Login Berhasil!");
+                
+                // Buka Form Utama
+                new FormUtama().setVisible(true);
+                
+                // Tutup Form Login
+                this.dispose();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Username atau Password Salah!");
+            }
         }
     } catch (java.sql.SQLException e) {
         e.printStackTrace();

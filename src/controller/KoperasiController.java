@@ -43,11 +43,9 @@ public class KoperasiController {
 
     private void displayToTable(List<Pinjaman> list) {
         DefaultTableModel model = (DefaultTableModel) view.getTabelPinjaman().getModel();
-    model.setRowCount(0); // Kosongkan tabel sebelum memuat data baru
+    model.setRowCount(0);
     
-    // Membuat format angka lokal Indonesia tanpa desimal di belakang koma
-    // #,##0 artinya angka akan dikelompokkan ribuan dengan tanda titik/koma sesuai lokal OS
-    java.text.DecimalFormat formatter = new java.text.DecimalFormat("#,##0");
+        java.text.DecimalFormat formatter = new java.text.DecimalFormat("#,##0");
     
     for (Pinjaman p : list) {
         String jumlahTerformat = formatter.format(p.getJumlah());
@@ -57,7 +55,7 @@ public class KoperasiController {
         model.addRow(new Object[]{
             p.getNo(), 
             p.getNama(), 
-            jumlahTerformat, // Masukkan data yang sudah diformat ke tabel
+            jumlahTerformat,
             angsuranTerformat
         });
     }
@@ -111,7 +109,7 @@ public class KoperasiController {
         }
     }
 
-    // Logika Hapus Data
+    // Hapus Data
     public void hapus() {
         String no = view.getTxtNo().getText();
         if (no.isEmpty()) {
@@ -132,7 +130,7 @@ public class KoperasiController {
         }
     }
 
-    // Membersihkan form isian textfield
+    // form isian textfield
     public void clearFields() {
         view.getTxtNo().setText("");
         view.getTxtNama().setText("");
